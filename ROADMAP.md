@@ -1,6 +1,6 @@
 # Roadmap — event-arbitrage-lab
 
-Status: **Initial scaffold**  
+Status: **PAUSED — owner directive 2026-11-14; historical milestone checklist below is not a verified current implementation inventory**  
 Owner: Alex  
 Repository: standalone project; no dependency on GPTHEIST.
 
