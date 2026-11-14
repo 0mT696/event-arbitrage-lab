@@ -12,5 +12,9 @@ dependencies = ["pydantic>=2.7"]
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.6"]
 
+[tool.setuptools.packages.find]
+where = ["src"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["src"]

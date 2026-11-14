@@ -1,0 +1,67 @@
+[
+  {
+    "venue": "polymarket",
+    "rest_api": true,
+    "websocket": true,
+    "orderbook_data": true,
+    "historical_data": true,
+    "fee_structure": "VERIFIED 2026-10-06 against official docs (docs.polymarket.com/trading/fees.md + polymarket.com/fees): taker-only fee = C x feeRate x p x (1-p), rounded to 5 decimals (min 0.00001 USDC). Official rates: crypto 0.07, sports 0.05 (v3, 13159 events; legacy v2 0.03 on 542 events + NFL/NCAAF promo 0.03 through Oct 2026), finance/politics/mentions/tech 0.04, economics/culture/weather/general 0.05, geopolitics/world explicitly fee-free. Makers never pay; maker rebates funded by taker fees plus tiered taker rebates — rebates excluded from modeling (gross fee = conservative basis). Gamma returns per-market feeSchedule{rate,exponent,takerOnly,rebateRate}+feesEnabled: adapter reads per-market first, category table fallback, unknown -> MAX 0.07 (fail-closed). Historic zero-fee assumption is stale.",
+    "market_outcome_semantics": "Binary YES/NO outcome tokens (CTF); multi-outcome via negRisk markets (negRisk flag required on orders). Fractional units allowed; min tick $0.001 (Rulebook Aug 2026). GTC/FOK/FAK order types.",
+    "settlement_rules": "UMA optimistic oracle; USDC on Polygon; winning share redeems $1.00. Neg Risk Adapter relayer address retired 2026-07-17 (old redemption scripts break). Polymarket US is CFTC-approved post-2025.",
+    "rate_limits": "Per IP per 10s: CLOB general 9000, /book 1500, /books 500, /prices-history 1000; Gamma 4000, /markets 300; Data API ~800-1000. Cloudflare throttles rather than rejects. Public reads need no auth; market WS channel public (PING every 10s).",
+    "geo_account_restrictions": "International venue + Polymarket US (CFTC). Reads are anonymous; trading requires wallet (self-custody, EIP-712 L1 + HMAC L2). US users routed to Polymarket US.",
+    "notes": "Strongest N1C candidate for read-side: free no-auth book/WS/history, generous limits. Fee model VERIFIED against official docs 2026-10-06 (supersedes N1B round-1 estimate: sports 0.03->0.05, crypto 0.072->0.07); adapter binds fee per market via feeSchedule."
+  },
+  {
+    "venue": "kalshi",
+    "rest_api": true,
+    "websocket": true,
+    "orderbook_data": true,
+    "historical_data": true,
+    "fee_structure": "Taker: roundup(M x 0.07 x C x P x (1-P)) to the cent, M=1 standard (S&P/Nasdaq series 0.035; crypto higher), cap $1.75/100 @ 50c. Maker: 0.0175 x C x P x (1-P) ONLY on series flagged quadratic_with_maker_fees, enabled 2026-08-19; maker multiplier defaults to 0. Ten zero-fee series. No settlement fee. Volume tiers discount taker rate. Sources: Kalshi fee schedule eff. 2026-07-07 via coinstats/kalshiview/polyKal 2026-09.",
+    "market_outcome_semantics": "Binary YES/NO event contracts, $1.00 settlement value; whole-contract minimum (Rulebook v1.15); per-market tick structures $0.01/$0.005/$0.002/$0.001/$0.0001 with tapered edge pricing (API docs Aug 2026). Also offers perpetuals (bps-based fee schedule) — separate product line.",
+    "settlement_rules": "CFTC-regulated DCM; exchange settlement to cash balance, winner $1.00 / loser $0, no settlement fee; typically within ~3h of official result against source named in market rules.",
+    "rate_limits": "REST + WebSocket per official docs (tiered by account); exact per-endpoint numbers not captured this round — UNKNOWN, needs docs pull.",
+    "geo_account_restrictions": "US-focused, KYC required; available in ~40-45 states, ongoing state-level challenges (19+ actions by Jan 2026, mostly sports). Account-based custody (not self-custody).",
+    "notes": "Fee formula matches core QuadraticTakerFee(rate=0.07) plus per-series multiplier M and optional maker leg — adapter must expose multiplier + maker/taker distinction. Settlement-source equivalence vs Polymarket (UMA vs Kalshi-designated source) is THE N4-hard problem for cross-venue pairs."
+  },
+  {
+    "venue": "limitless",
+    "rest_api": null,
+    "websocket": null,
+    "orderbook_data": true,
+    "historical_data": null,
+    "fee_structure": "AMM markets: flat 0.25% every trade. Order-book markets: 0.03%-3% moving inversely with probability (>2x return trades slightly higher); makers pay 0, takers only. Source: predictionhero 2026-07 citing Limitless fee docs.",
+    "market_outcome_semantics": "Binary + multi-outcome markets on Base (crypto-native). Detail semantics UNKNOWN this round.",
+    "settlement_rules": "UNKNOWN this round — oracle/resolution source not verified.",
+    "rate_limits": "UNKNOWN — API surface not verified this round.",
+    "geo_account_restrictions": "UNKNOWN — wallet-based presumed; restrictions not verified.",
+    "notes": "Research gaps marked null per fail-closed; second research round needed before N1C consideration."
+  },
+  {
+    "venue": "manifold",
+    "rest_api": true,
+    "websocket": null,
+    "orderbook_data": false,
+    "historical_data": true,
+    "fee_structure": "Play-money (Mana) only; no real-cash settlement. Market creation costs Mana (binary M$50). API reads free; membership tiers raise rate limits.",
+    "market_outcome_semantics": "Five types: binary, multiple choice (dependent or independent), pseudo-numeric, poll, bountied. AMM-based, limit orders supported via API.",
+    "settlement_rules": "Creator/community resolution in Mana; NOT redeemable for cash or crypto.",
+    "rate_limits": "Free reads; tiered memberships raise limits (exact numbers UNKNOWN).",
+    "geo_account_restrictions": "Global, no KYC (play-money model).",
+    "notes": "REJECTED for arbitrage at N1B: no real-value settlement means no realizable edge. Retained in matrix as documentation of the exclusion decision."
+  },
+  {
+    "venue": "sx_bet",
+    "rest_api": true,
+    "websocket": true,
+    "orderbook_data": true,
+    "historical_data": null,
+    "fee_structure": "Advertised 0% on straight bets, 5% on winning parlays; BUT fee charge_basis = settlement_profit (charged on profit of winning position at settlement, not entry notional) and rates can be account-specific (PredictorSDK changelog 2026-09). Different fee SHAPE, not just rate.",
+    "market_outcome_semantics": "Sports-native: moneylines, spreads, totals, alt lines, in-play. Binary-outcome model (not back/lay). Maker posts outcome+stake+odds, taker fills fully or partially.",
+    "settlement_rules": "USDC escrow smart contract; settles on reported result; cancellation/postponement/push rules are sport-specific and must be read per market type.",
+    "rate_limits": "Public no-key read API for active markets; exact limits UNKNOWN.",
+    "geo_account_restrictions": "Wallet/account workflow required; regional restrictions UNKNOWN — must confirm eligibility.",
+    "notes": "Sports-only scope limits event overlap with Polymarket/Kalshi politics-economics core; settlement_profit fee basis would need a new FeeModel shape in core if selected."
+  }
+]
