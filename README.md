@@ -31,6 +31,8 @@ No live execution is permitted until the project has passed historical replay, p
 
 Previous independent review in the project conversation recorded N1–N6 as accepted and N7A–N7C as implemented/reviewed. N7D's seven-day observation was scheduled for 2026-10-07 through 2026-10-14; its actual completion and final empirical results have **not been independently verified**.
 
+**VPS source verified 2026-11-14:** VPS `/root/event-arbitrage-lab` HEAD `52259e14fca1aacec4417132ae6b41e7525a4a40`, clean tracked files (`.venv/` untracked); independent Git Bundle contains matching commit. GitHub SSH authentication from VPS failed (`Permission denied (publickey)`). N7 services `eal-collector` and `eal-paper` were stopped and disabled. VPS `/root/eal-data/n7` still holds approximately 50GB (42GB sweeps, 7.8GB paper ledger), not yet archived or deleted. **GitHub code is NOT synchronized to the VPS commit.**
+
 **Repository synchronization is not yet verified:** the default-branch README/ROADMAP previously described only the initial scaffold. Do not assume this repository contains the latest VPS code or data. Before deleting VPS assets, reconcile code commits, experiment manifests, ledgers, raw sweeps, checkpoints and reports with durable storage; verify hashes and restore/replay capability.
 
 **Operational hold:** stop collectors, paper runners and scheduled jobs. N8/live execution remains out of scope. Preserve the repository and its history. Restart requires explicit owner approval.
