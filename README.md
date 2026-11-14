@@ -25,8 +25,14 @@ The initial system is research-only and paper-trading only. It must not place li
 
 No live execution is permitted until the project has passed historical replay, paper trading, partial-fill simulation, fee/slippage validation, and an explicit human approval review.
 
-## Status
+## Status — PAUSED (2026-11-14)
 
-Early scaffold — architecture and roadmap initialized.
+**Project paused by owner instruction. No further development, collection, paper execution, or live trading is authorized.**
+
+Previous independent review in the project conversation recorded N1–N6 as accepted and N7A–N7C as implemented/reviewed. N7D's seven-day observation was scheduled for 2026-10-07 through 2026-10-14; its actual completion and final empirical results have **not been independently verified**.
+
+**Repository synchronization is not yet verified:** the default-branch README/ROADMAP previously described only the initial scaffold. Do not assume this repository contains the latest VPS code or data. Before deleting VPS assets, reconcile code commits, experiment manifests, ledgers, raw sweeps, checkpoints and reports with durable storage; verify hashes and restore/replay capability.
+
+**Operational hold:** stop collectors, paper runners and scheduled jobs. N8/live execution remains out of scope. Preserve the repository and its history. Restart requires explicit owner approval.
 
 See [ROADMAP.md](ROADMAP.md) for milestones.
